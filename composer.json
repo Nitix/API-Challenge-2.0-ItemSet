@@ -1,0 +1,15 @@
+{
+  "name": "nitix/ItemSet",
+  "description": "Repository for the riots's API Challenge 2.0, Ingame Name : Nitixx",
+  "minimum-stability": "stable",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Guillaume Pierson"
+    }
+  ],
+  "require": {
+    "twig/twig": "~1.0",
+    "guzzlehttp/guzzle": "6.0.2"
+  }
+}
