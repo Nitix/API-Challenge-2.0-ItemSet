@@ -12,7 +12,7 @@ this will help player to know on which champion, this item set is was created.
 
 ### Creating within the site
 
-When crating with in the site, you will see that the interface is nearly the same that in the launcher or,
+When crating within the site, you will see that the interface is nearly the same that in the launcher or,
 in-game. In this interface, there is a search bar, in this search bar, you can search the name of the item,
 or the tags. You have checkbox to restrict the items. You can to select multiples category to restricts even more.
 And thee are button group that give all items that are in the following checkbox.
