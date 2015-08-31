@@ -1,0 +1,298 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Create an item set{% endblock %}
+{% block content %}
+    <h2>Create an item set</h2>
+
+    <div class="col-md-2">
+        <div class="form-group">
+            <input type="search" id="item-search-input" class="form-control" placeholder="Search items">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-all active">All items</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Starting Items</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Jungle"> Jungle
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Lane"> Lane
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Tools</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Consumable"> Consumable
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="GoldPer"> Gold Income
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Vision"> Vision & Trinkets
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Defense</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Armor"> Armor
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Health"> Health
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="HealthRegen"> Health Regen
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="SpellBlock"> Magic Resist
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Attack</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="AttackSpeed"> Attack Speed
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="CriticalStrike"> Critical Damage
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Damage"> Damage
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="LifeSteal"> Life Steal
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Magic</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="CooldownReduction"> Cooldown Reduction
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Mana"> Mana
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="ManaRegen"> Mana Regen
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="SpellDamage"> Ability Power
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-block search-group">Movement</button>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="Boots"> Boots
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox-search" data-tag="NonbootsMovement"> Other Movement
+                </label>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4" id="itemlist">
+        {% for item in items %}
+            <div id="item-{{ item.get('id') }}" class="item-search" data-id="{{ item.get('id') }}"
+                 data-tags="{% if item.get('tags') is not empty %}{{ item.get("tags")|join(';') }}{% endif %}">
+                {% include "item.html.twig" %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-6">
+        <form action="{{ url('itemset', 'post') }}" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                </div>
+            </div>
+            <button type="button" class="btn btn-default btn-block collapser collapsed" data-toggle="collapse" data-target="#more-options" aria-expanded="false" aria-controls="panel-footer-0">Options</button>
+            <br>
+            <div id="more-options" class="collapse">
+                <div class="form-group">
+                    <label for="champion" class="col-sm-2 control-label">Champion</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="champion" name="champion">
+                            <option value="-1">All</option>
+                            {% for champion in champions %}
+                                <option value="{{ champion.get('id') }}">{{ champion.get('name') }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="type" class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="type" name="type">
+                            {% for value in type.getConstList() %}
+                                <option value="{{ value }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="map" class="col-sm-2 control-label">Map</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="map" name="map">
+                            {% for value in map.getConstList() %}
+                                <option value="{{ value }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mode" class="col-sm-2 control-label">Mode</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="mode" name="mode">
+                            {% for value in mode.getConstList() %}
+                                <option value="{{ value }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="priority" class="col-sm-2 control-label">Priority</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="priority" name="priority">
+                            <option value="false">false</option>
+                            <option value="true">true</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sortrank" class="col-sm-2 control-label">Sort Rank</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="sortrank" name="sortrank" placeholder="0" min="0">
+                    </div>
+                </div>
+                <label for="comment" class="control-label">Comments</label><br>
+                <textarea class="form-control" id="comment" name="comment" placeholder="Comments (optionnal)"></textarea>
+            </div>
+            <br>
+            <div class="panel panel-default" data-id="0">
+                <div class="panel-heading">
+                    <input type="text" class="form-control"  name="blocks[0][type]" placeholder="Name of the block">
+                </div>
+                <div class="panel-body sortable-block" id="sortable-block-0">
+                </div>
+                <div class="panel-body">
+                    <span>Drop items <i class="fa fa-arrow-up"></i> too add them to the block, subsequent same items will grouped when posted. </span>
+                    <br>
+                    <button type="button" class="btn btn-default collapser collapsed" data-toggle="collapse" data-target="#panel-footer-0" aria-expanded="false" aria-controls="panel-footer-0">Options</button>
+                </div>
+                <div class="panel-footer collapse" id="panel-footer-0">
+                    <label>
+                        <input type="checkbox" name="blocks[0][recMath]" value="true"> Show this block as tutorial
+                    </label><br>
+                    <label for="blocks[0][minSummonerLevel]" class="control-label">Minimum Summoner Level (-1 no limit)</label><br>
+                    <input type="number" class="form-control" id="blocks[0][minSummonerLevel]" name="blocks[0][minSummonerLevel]" placeholder="-1" min="-1">
+                    <label for="blocks[0][maxSummonerLevel]" class="control-label">Maximum Summoner Level (-1 no limit)</label><br>
+                    <input type="number" class="form-control" id="blocks[0][maxSummonerLevel]" name="blocks[0][maxSummonerLevel]" placeholder="-1" min="-1">
+                    <label for="blocks[0][showIfSummonerSpell]" class="control-label">Show if the following spell is present</label><br>
+                    <select class="form-control" id="blocks[0][showIfSummonerSpell]" name="blocks[0][showIfSummonerSpell]">
+                        <option value="">Always shown</option>
+                        {% for ss in summonerSpell %}
+                            <option value="{{ ss.get('id') }}">{{ ss.get('name') }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="blocks[0][hideIfSummonerSpell]" class="control-label">Hide if the following spell is present (Override Show)</label><br>
+                    <select class="form-control" id="blocks[0][hideIfSummonerSpell]" name="blocks[0][hideIfSummonerSpell]">
+                        <option value="">Never hide</option>
+                        {% for ss in summonerSpell %}
+                            <option value="{{ ss.get('id') }}">{{ ss.get('name') }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="blocks[0][comment]" class="control-label">Comments</label><br>
+                    <textarea class="form-control" id="blocks[0][comment]" name="blocks[0][comment]" placeholder="Comments (optionnal)"></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-default btn-block" id="new-block">Add a block</button>
+            <br>
+            <br>
+            <p>By pressing create, you will register this item set in the database,
+            therefore this item set would be viewable by all, you will get an URL that you can use
+             to share with other people </p>
+            <br>
+            <button type="submit" class="btn btn-default btn-block">Create</button>
+        </form>
+        <script>
+            var blocktext =
+                '<div class="panel panel-default" id="panel-BLOCKID" data-id="BLOCKID">'
+                    +'<div class="panel-heading">'
+                        +'<input type="text" class="form-control" style="display: inline-block;width:90%" name="blocks[BLOCKID][type]" placeholder="Name of the block">'
+                    +'<button type="button" class="close" style="display: inline-block;margin-top:5px;width:10%" data-target="#panel-BLOCKID" data-dismiss="alert">'
+                        +'<span aria-hidden="true"><i class="fa fa-times fa-lg"></i></span><span class="sr-only">Close</span>'
+                    +'</button>'
+                    +'</div>'
+                    +'<div class="panel-body sortable-block" id="sortable-block-BLOCKID">'
+                    +'</div>'
+                    +'<div class="panel-body">'
+                        +'<button type="button" class="btn btn-default collapser collapsed" data-toggle="collapse" data-target="#panel-footer-BLOCKID" aria-expanded="false" aria-controls="panel-footer-BLOCKID">Options</button>'
+                    +'</div>'
+                    + '<div class="panel-footer collapse" id="panel-footer-BLOCKID"> <br>'
+                        +'<label>'
+                            +'<input type="checkbox" name="blocks[BLOCKID][recMath]" value="true"> Show this block as tutorial'
+                        +'</label><br>'
+                        +'<label for="blocks[BLOCKID][minSummonerLevel]" class="control-label">Minimum Summoner Level (-1 no limit)</label><br>'
+                        +'<input type="number" class="form-control" id="blocks[BLOCKID][minSummonerLevel]" name="blocks[BLOCKID][minSummonerLevel]" placeholder="-1" min="-1">'
+                        +'<label for="blocks[BLOCKID][maxSummonerLevel]" class="control-label">Maximum Summoner Level (-1 no limit)</label><br>'
+                        +'<input type="number" class="form-control" id="blocks[BLOCKID][maxSummonerLevel]" name="blocks[BLOCKID][maxSummonerLevel]" placeholder="-1" min="-1">'
+                        +'<label for="blocks[BLOCKID][showIfSummonerSpell]" class="control-label">Show if the following spell is present</label><br>'
+                        +'<select class="form-control" id="blocks[BLOCKID][showIfSummonerSpell]" name="blocks[BLOCKID][showIfSummonerSpell]">'
+                            +'<option value="">Always shown</option>'
+                            {% for ss in summonerSpell %}
+                                +'<option value="{{ ss.get("id") }}">{{ ss.get("name") }}</option>'
+                            {% endfor %}
+                        +'</select>'
+                        +'<label for="blocks[BLOCKID][hideIfSummonerSpell]" class="control-label">Hide if the following spell is present (Override Show)</label><br>'
+                        +'<select class="form-control" id="blocks[BLOCKID][hideIfSummonerSpell]" name="blocks[BLOCKID][hideIfSummonerSpell]">'
+                            +'<option value="">Never hide</option>'
+                            {% for ss in summonerSpell %}
+                                +'<option value="{{ ss.get("id") }}">{{ ss.get("name") }}</option>'
+                            {% endfor %}
+                        +'</select>'
+                        +'<label for="blocks[BLOCKID][comment]" class="control-label">Comments</label><br>'
+                        +'<textarea class="form-control" id="blocks[BLOCKID][comment]" name="blocks[BLOCKID][comment]" placeholder="Comments (optionnal)"></textarea>'
+                +'</div>'
+                +'</div>'
+        </script>
+    </div>
+{% endblock %}
+
+

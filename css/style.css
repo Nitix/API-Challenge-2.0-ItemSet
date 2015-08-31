@@ -1,0 +1,121 @@
+body
+{
+    background: black url("../img/background.jpg") fixed top center;
+}
+
+.semi-transparent
+{
+    background-color: rgba(255,255,255,0.75);
+}
+
+.page-header > h1 > a, .page-header > h1 > a:hover
+{
+    color : #333333;
+    text-decoration: none;
+}
+
+#content, footer
+{
+    border-radius: 30px;
+    padding: 1px 30px 30px 30px;
+}
+
+footer
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 30px;
+}
+
+.page-header
+{
+    background-color: rgba(255,255,255,0.25);
+}
+
+.img-line
+{
+    max-height: 20px;
+}
+
+.hover-relative, .item-search
+{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.hover-absolute
+{
+    position: absolute;
+    display: none;
+    width : 400px;
+    max-width: 400px;
+}
+
+.itemRiot
+{
+    border: 1px solid black;
+    text-align: center;
+    margin: 3px;
+}
+
+.itemRiot > .itemRiot-detail
+{
+    text-align: left;
+    left: 67px;
+}
+
+.summonerSpell-detail-inline
+{
+    left : 25px;
+}
+
+.recmath
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+stats
+{
+    color: #3baa3b;
+}
+
+active, passive, unique
+{
+    color: #c7ab2a;
+}
+
+groupLimit
+{
+    color: red;
+}
+
+/* Icon when the collapsible content is shown */
+.collapser:before {
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+}
+
+/* Icon when the collapsible content is hidden */
+.collapser.collapsed:before {
+    content: "\e080";
+}
+
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
+
+[draggable] {
+     -moz-user-select: none;
+     -khtml-user-select: none;
+     -webkit-user-select: none;
+     user-select: none;
+     /* Required to make elements draggable in old WebKit */
+     -khtml-user-drag: element;
+     -webkit-user-drag: element;
+}

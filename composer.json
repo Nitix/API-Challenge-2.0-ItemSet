@@ -8,8 +8,21 @@
       "name": "Guillaume Pierson"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Nitix/leaguewrap"
+    }
+  ],
   "require": {
     "twig/twig": "~1.0",
-    "guzzlehttp/guzzle": "6.0.2"
+    "paquettg/leaguewrap": "dev-master"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "Nitixx\\": "Nitixx/"
+    }
   }
+
 }

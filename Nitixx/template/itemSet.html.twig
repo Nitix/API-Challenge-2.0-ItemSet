@@ -1,0 +1,95 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Visualization of a item set{% endblock %}
+{% block content %}
+    <h2>Item Set : {{ itemSet.title }}</h2>
+
+    URL : <code>https://itemset.guillaumepierson.fr{{ url('itemset', 'view', {id: itemSet.id }) }}</code><br><br>
+
+    Map : {{ static_method('Nitixx\\Models\\Map','getFullName', [ itemSet.map ]) }}<br>
+    Mode : {{ static_method('Nitixx\\Models\\Mode','getFullName', [ itemSet.mode ]) }}<br>
+    Type : {{ static_method('Nitixx\\Models\\ItemSetType','getFullName', [ itemSet.type ]) }}<br>
+    Priority : {% if itemSet.priority %}True{% else %}False{% endif %} : Selectively sort this item set above other item sets.<br>
+    Sort Rank : {{ itemSet.sortRank }}  : The order in which this item set will be sorted within a specific type.<br>
+
+    Author Note : <br>
+    {{ itemSet.comment }}
+
+    {% for block in itemSet.blocks %}
+
+        <h3>{{ block.type }}</h3>
+        <ul>
+            {%  if  block.minSummonerLevel != -1 %}
+                <li>Mininum level of summoner : {{ block.minSummonerLevel }}</li>
+            {% endif %}
+
+            {%  if  block.maxSummonerLevel != -1 %}
+               <li>Maximum level of summoner : {{ block.maxSummonerLevel }}</li>
+            {% endif %}
+
+            {% set summonerSpell = block.showIfSummonerSpell %}
+            {% if summonerSpell is not empty %}
+                <li>Hide if {%  include "summonerSpell.html.twig" %} is present </li>
+            {% endif %}
+
+            {% set summonerSpell = block.showIfSummonerSpell %}
+            {% if summonerSpell is not empty %}
+                <li>Show if {%  include "summonerSpell.html.twig" %} is present (Override Show if they are the same)</li>
+            {% endif %}
+
+            <li>Author Note: <br>
+            {{ itemSet.comment }}</li>
+
+            {% if block.recMath %}
+                {% for itemBlock in block.items %}
+                    {% if loop.last %}
+                        <i class="recmath fa fa-arrow-right fa-2x"></i>
+
+                    {% else %}
+                        {% if not loop.first %}
+                            <i class="recmath fa fa-plus fa-2x"></i>
+                        {% endif %}
+                    {% endif %}
+                    {% set item = itemBlock.item %}
+                    {% include "item.html.twig" %}
+                {% endfor %}
+            {% else %}
+                {% for itemBlock in block.items %}
+                    {% set item = itemBlock.item %}
+                    {% include "item.html.twig" %}
+                {% endfor %}
+            {% endif %}
+        </ul>
+    {% endfor %}
+
+    Directory to save the JSON File : <br>
+
+    <label>Global</label> : <code>League of Legends\Config\Global\Recommended\</code> <br>
+
+    <label for="chamionkey">Or for this champion</label>
+    <select class="form-control" id="championkey" style="display: inline-block; width:20%;">
+        <option value="{championKey}"></option>
+        {% if itemSet.champion == 0 %}
+            {% for champion in champions %}
+                <option value="{{ champion.get('key') }}">{{ champion.get('name') }}</option>
+            {% endfor %}
+        {% else %}
+            {% set selected = itemSet.champion %}
+            {% for champion in champions %}
+                <option value="{{ champion.get('key') }} {% if selected == champion.get('id') %}selected{%  endif %}">{{ champion.get('name') }}</option>
+            {% endfor %}
+        {% endif %}
+    </select>
+    <code id="text-champion">League of Legends\Config\Champions\{championKey}\Recommended\</code>
+    <br>
+    <br>
+    <a href="{{ url('itemset', 'download', {id:itemSet.id}) }}"><button class="btn btn-default">Download as JSON</button></a>
+    <br><br>
+    Or if you prefer to copy and paste the json ?
+    {% autoescape 'html' %}
+        <pre class="stringify">{{ itemSet.toJson() }}</pre>
+    {% endautoescape %}
+
+{% endblock %}
+
+

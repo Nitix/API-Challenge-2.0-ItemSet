@@ -1,0 +1,17 @@
+{% set img = item.get('image') %}
+<div class="itemRiot hover-relative">
+    <div class="itemRiot-image"><img draggable="false" src="{{ static_method('Nitixx\\Utils\\Utils','getDataDragonImage', [version , img.get('group'), img.get('full')]) }}" alt="{{ item.get('name')}}"></div>
+    <div class="itemRiot-count">{% if itemBlock is not null %}x {{ itemBlock.count }}{% else %}{{ item.get('gold').get('total') }}{% endif %}</div>
+    <div class="popover right itemRiot-detail hover-absolute">
+        <div class="arrow"></div>
+        <h3 class="popover-title">{{ item.get('name') }}</h3>
+        <div class="popover-content">
+            Price : {{ item.get('gold').get('total') }}<br>
+            <br>
+            {% autoescape false %}
+                {{ close_tag( item.get('description')) }}
+            {% endautoescape %}
+        </div>
+    </div>
+</div>
+

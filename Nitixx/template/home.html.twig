@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Welcome{% endblock %}
+{% block content %}
+    <h2>Greetings summoner. </h2>
+
+    <p>Hi summoner, in this website you an create ItemSet within this site with all options of the item sets
+    as designed in the <a href="https://developer.riotgames.com/docs/item-sets">riot developers website</a>.
+    Or you can upload your item set to share it.</p>
+
+    <p>Weh you have upload/created it you will be able to download or copy/paste the item set.
+    And the possibility to share your build, with an given url</p>
+
+    <a href="{{ url('itemset', 'create') }}"><button class="btn btn-default">Create a item set</button></a>
+    <a href="{{ url('itemset') }}"><button class="btn btn-default">Upload a item set</button></a>
+{% endblock %}
+
+

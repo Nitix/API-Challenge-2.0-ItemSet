@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{% block lang %}{% endblock %}">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=0.132">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="/js/script.js?v=0.161"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.2.1/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1><a href="/">Item Set Sharing</a> <small>Api Challenge 2.0</small></h1>
+        </header>
+        <div id="content" class="semi-transparent">
+            <div class="row">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <footer class="semi-transparent">
+            <div class="row">
+                Website made with <i class="fa fa-heart"></i> by Nitixx (EUW) - <a href="mailto:admin@guillaumepierson.fr">Contact/Request</a> - <a href="https://github.com/Nitix/API-Challenge-2.0-ItemSet">Source code</a>
+
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

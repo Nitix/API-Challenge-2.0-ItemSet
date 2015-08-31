@@ -1,0 +1,14 @@
+{% set img = summonerSpell.get('image') %}
+
+<div class="hover-relative">
+    <img class="img-line" src="{{ static_method('Nitixx\\Utils\\Utils','getDataDragonImage', [version , img.get('group'), img.get('full')]) }}" alt="{{ summonerSpell.get('name')}}">
+    <div class="popover right summonerSpell-detail-inline hover-absolute">
+        <div class="arrow"></div>
+        <h3 class="popover-title">{{ summonerSpell.get('name') }}</h3>
+        <div class="popover-content">
+            {% autoescape false %}
+                {{ summonerSpell.get('description') }}
+            {% endautoescape %}
+        </div>
+    </div>
+</div>
