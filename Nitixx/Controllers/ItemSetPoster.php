@@ -71,7 +71,7 @@ class ItemSetPoster
 
         //Type
         if(isset($_POST['champion'])) {
-            $champion = $this->summonerSpellList->getSpell($_POST['champion']);
+            $champion = $this->champions->getChampion($_POST['champion']);
             if($champion != null)
                 $this->itemSet->setChampion($champion);
         }
@@ -109,7 +109,9 @@ class ItemSetPoster
         if(isset($_POST['blocks'])){
             ksort($_POST['blocks']);
             foreach($_POST['blocks'] as $block){
-                $this->itemSet->addBlock($this->parseBlock($block));
+                $b = $this->parseBlock($block);
+                if($b != null)
+                    $this->itemSet->addBlock($b);
             }
         }
     }
@@ -118,7 +120,7 @@ class ItemSetPoster
      * Parse a block from an array
      * @param array $data
      *
-     * @return Block
+     * @return Block|null
      */
     private function parseBlock(Array $data){
         $block = new Block();
@@ -171,6 +173,8 @@ class ItemSetPoster
             $block->setItems($this->parseItems($data['items'], $block));
 
         }
+        if(empty($block->getItems()))
+            return null;
         return $block;
     }
 

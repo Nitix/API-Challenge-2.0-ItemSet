@@ -84,7 +84,9 @@ class ItemSetParser
 
         if(isset($json['blocks'])){
             foreach($json['blocks'] as $json_block){
-               $this->itemSet->addBlock($this->parseBlock($json_block));
+                $b = $this->parseBlock($json_block);
+                if($b !== null)
+                    $this->itemSet->addBlock($b);
             }
         }
     }
@@ -93,7 +95,7 @@ class ItemSetParser
      * Parse a block from an array
      * @param array $json
      *
-     * @return Block
+     * @return Block|null null if empty
      */
     private function parseBlock(Array $json){
         $block = new Block();
@@ -137,8 +139,12 @@ class ItemSetParser
         }
 
         foreach($json['items'] as $item){
-            $block->addItem($this->parseItem($item, $block));
+            $i = $this->parseItem($item, $block);
+            if($i != null)
+                $block->addItem($i);
         }
+        if(empty($block->getItems()))
+            return null;
         return $block;
     }
 
@@ -146,7 +152,7 @@ class ItemSetParser
      * Convert an item block from array json to our models
      * @param array $json
      * @param Block $block
-     * @return ItemBlock
+     * @return ItemBlock|null null if empty
      */
     private function parseItem(array $json, Block $block){
         $itemBlock = new ItemBlock();
@@ -158,6 +164,10 @@ class ItemSetParser
             $item = $this->itemList->getItem(@(int)$json['id']);
             if($item != null)
                 $itemBlock->setItem($item);
+            else
+                return null;
+        }else{
+            return null;
         }
 
         //Count

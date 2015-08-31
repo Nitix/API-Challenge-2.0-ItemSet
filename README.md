@@ -28,3 +28,8 @@ If they don't exist the summoner spell or item is ignored.
 
 During programming, i was not able to check mode and map with the RIOT API, so I have used the SplEnum to Enum the list,
 I Riot add a map, I will had to add it the the Enum, it would be quickly.
+
+## So what would be always up to date ?
+
+Using the riot API, items, champions, and summoner spells would always be up to date, so when riot add items,
+the website would have new items.

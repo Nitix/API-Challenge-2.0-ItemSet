@@ -4,7 +4,7 @@
 namespace Nitixx\Models;
 
 
-class ItemSetType extends \SplEnum
+class ItemSetType extends FullNameEnum
 {
     const CUSTOM = "custom";
     const GLOBAL_ = "global";
@@ -36,4 +36,14 @@ class ItemSetType extends \SplEnum
     public static function getFullName(ItemSetType $itemSetType){
         return (string)$itemSetType;
     }
+
+    /**
+     * @inheritDoc
+     */
+    static function getByName($text)
+    {
+        return self::getItemSetType($text);
+    }
+
+
 }

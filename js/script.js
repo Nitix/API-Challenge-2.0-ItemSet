@@ -177,7 +177,7 @@ $(document).ready(function () {
     $('#new-block').on('click', function(){
         var text = blocktext.replace(/BLOCKID/g, blockid);
 
-        $(text).insertBefore(this)
+        $(text).insertBefore(this);
         Sortable.create(byId('sortable-block-'+blockid), {
             sort: true,
             group: {
@@ -193,6 +193,41 @@ $(document).ready(function () {
         });
         blockid++;
     });
+
+    $('#map-restrict, #mode-restrict, #champion-restrict, #strict').on('change', function(){
+        var hide = [];
+        var items = $('.entry');
+
+        hide = checkRestrict(hide, items, '#map-restrict', 'map');
+        hide = checkRestrict(hide, items, '#mode-restrict', 'mode');
+        hide = checkRestrict(hide, items, '#champion-restrict', 'champion');
+
+        items.each(function(){
+            if($.inArray(this, hide) == -1){
+                $(this).show();
+            }
+        });
+    });
+
+    var checkRestrict = function(hide, items, id, type){
+        var search = $(id).val();
+        if(search != "any") {
+            items.each(function () {
+                if($('#strict').is(':checked')) {
+                    if ($(this).data(type).indexOf(search) == -1) {
+                        $(this).hide();
+                        hide.push(this);
+                    }
+                }else{
+                    if ($(this).data(type).indexOf(search) == -1 && $(this).data(type) != 'any' && $(this).data(type) != '') {
+                        $(this).hide();
+                        hide.push(this);
+                    }
+                }
+            });
+        }
+        return hide;
+    };
 
     var blockid = 1;
 

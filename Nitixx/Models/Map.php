@@ -3,7 +3,7 @@
 
 namespace Nitixx\Models;
 
-class Map extends \SplEnum
+class Map extends FullNameEnum
 {
     /**
      * Any map
@@ -75,5 +75,14 @@ class Map extends \SplEnum
             default:
                 return "All Maps ( Who need a map? )";
         }
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    static function getByName($text)
+    {
+        return self::getMap($text);
     }
 }

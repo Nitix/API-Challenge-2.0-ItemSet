@@ -3,7 +3,7 @@
 
 namespace Nitixx\Models;
 
-class Mode extends \SplEnum
+class Mode extends FullNameEnum
 {
     /**
      * Any mode
@@ -46,6 +46,8 @@ class Mode extends \SplEnum
                 return new Mode(Mode::ARAM);
             case Mode::ODIN:
                 return new Mode(Mode::ODIN);
+            case Mode::ASCENSION :
+                return new Mode(Mode::ASCENSION);
             default:
                 return new Mode(Mode::ANY);
         }
@@ -66,8 +68,19 @@ class Mode extends \SplEnum
                 return "ARAM";
             case Mode::ODIN:
                 return "Dominion";
+            case Mode::ASCENSION:
+                return "Ascension";
             default:
-                return "All modes, no one is rejected!";
+                return "All modes";
         }
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    static function getByName($text)
+    {
+        return self::getMode($text);
     }
 }

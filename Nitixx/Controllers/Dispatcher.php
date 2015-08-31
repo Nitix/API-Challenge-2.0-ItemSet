@@ -90,14 +90,11 @@ class Dispatcher
             }
         }catch (\LeagueWrap\Response\Http503 $e){
             $this->displayError(2503, self::DEFAULT_CONTROLLER, 'riotAPIDown');
-            throw $e;
         }catch (\PDOException $e ) {
             $this->displayError(1000, self::DEFAULT_CONTROLLER, 'databaseDown');
-            throw $e;
         }catch (\Exception $e) {
             $this->displayFatalError("An internal error as happened, contact the administrator at
             admin@guillaumepierson.fr and say what you have done to get this error. I Would appreciate a lot");
-            throw $e;
         }
     }
 

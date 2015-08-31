@@ -12,8 +12,8 @@
     Priority : {% if itemSet.priority %}True{% else %}False{% endif %} : Selectively sort this item set above other item sets.<br>
     Sort Rank : {{ itemSet.sortRank }}  : The order in which this item set will be sorted within a specific type.<br>
 
-    Author Note : <br>
-    {{ itemSet.comment }}
+    {% if itemSet.comment is not empty %}Author Note:
+        {{ itemSet.comment }}{% endif %}
 
     {% for block in itemSet.blocks %}
 
@@ -29,16 +29,16 @@
 
             {% set summonerSpell = block.showIfSummonerSpell %}
             {% if summonerSpell is not empty %}
-                <li>Hide if {%  include "summonerSpell.html.twig" %} is present </li>
+                <li>Show if {%  include "summonerSpell.html.twig" %} is present </li>
             {% endif %}
 
-            {% set summonerSpell = block.showIfSummonerSpell %}
+            {% set summonerSpell = block.hideIfSummonerSpell %}
             {% if summonerSpell is not empty %}
-                <li>Show if {%  include "summonerSpell.html.twig" %} is present (Override Show if they are the same)</li>
+                <li>Hide if {%  include "summonerSpell.html.twig" %} is present (Override Show if they are the same)</li>
             {% endif %}
 
-            <li>Author Note: <br>
-            {{ itemSet.comment }}</li>
+            {% if block.comment is not empty %}<li>Author Note: <br>
+            {{ block.comment }}</li>{% endif %}
 
             {% if block.recMath %}
                 {% for itemBlock in block.items %}

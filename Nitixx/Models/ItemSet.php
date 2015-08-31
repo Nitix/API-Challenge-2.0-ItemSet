@@ -345,7 +345,7 @@ class ItemSet implements DBObjectInterface
         $map  = $this->map; //PDO will overwrite my datatype if I don't copy them
         $type = $this->type;
         $mode = $this->mode;
-        $champion = $this->champion->get('id');
+        $champion = ($this->champion  != null ? $this->champion->get('id') : 0);
         $stmt->bindParam(':title',    $this->title,    \PDO::PARAM_STR );
         $stmt->bindParam(':type',     $type,           \PDO::PARAM_STR );
         $stmt->bindParam(':map',      $map,            \PDO::PARAM_STR );

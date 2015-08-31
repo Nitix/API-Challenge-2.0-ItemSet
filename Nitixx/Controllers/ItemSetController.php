@@ -30,10 +30,7 @@ class ItemSetController extends Controller
 
     function indexAction()
     {
-        $twig = $this->twigInit();
-
-        $template = $twig->loadTemplate('upload.html.twig');
-        echo $template->render([]);
+        $this->listAction();
     }
 
     /**
@@ -54,7 +51,13 @@ class ItemSetController extends Controller
                         $parser->parse($json);
                         $itemSet = $parser->getItemSet();
                         $itemSet->save();
-                        $this->displayItemSet($itemSet);
+                        if(!empty($itemSet->getBlocks())) {
+                            $itemSet->save();
+                            header('Location: ' . Controller::generateURL('itemset', 'view', ['id' => $itemSet->getId()]));
+                        }else{
+                            $template = $twig->loadTemplate('upload.html.twig');
+                            echo $template->render(['error' => 'You have no blocks']);
+                        }
                    } else {
                         $template = $twig->loadTemplate('upload.html.twig');
                         echo $template->render(['error' => 'Incorrect Json file']);
@@ -69,7 +72,7 @@ class ItemSetController extends Controller
             }
         } else {
             $template = $twig->loadTemplate('upload.html.twig');
-            echo $template->render(['error' => 'No item set uploaded']);
+            echo $template->render([]);
         }
     }
 
@@ -83,6 +86,7 @@ class ItemSetController extends Controller
         if(!empty($args)) {
             $itemSet = ItemSet::findById($args['id']);
             if($itemSet){
+                $itemSet->getBlocks();
                 $this->displayItemSet($itemSet);
             }else{
                 $template = $twig->loadTemplate('404.html.twig');
@@ -99,7 +103,9 @@ class ItemSetController extends Controller
         $twig = $this->twigInit();
         $list = ItemSet::findAll();
         $template = $twig->loadTemplate('itemSetList.html.twig');
-        echo $template->render(['list' => $list]);
+        $champions = ApiManager::getAPI()->staticData()->getChampions();
+        $champions->sortByName();
+        echo $template->render(['list' => $list, 'type' => new ItemSetType(), 'mode' => new Mode(), 'map' => new Map(), 'champions' =>  $champions]);
     }
 
     public function downloadAction($args = [])
@@ -140,8 +146,12 @@ class ItemSetController extends Controller
         $poster = new ItemSetPoster();
         $poster->parse();
         $itemSet = $poster->getItemSet();
-        $itemSet->save();
-        $this->displayItemSet($itemSet);
+        if(!empty($itemSet->getBlocks())) {
+            $itemSet->save();
+            header('Location: ' . Controller::generateURL('itemset', 'view', ['id' => $itemSet->getId()]));
+        }else{
+            header('Location: ' . Controller::generateURL('itemset', 'create'));
+        }
    }
 
     private function displayItemSet(ItemSet $itemSet)
