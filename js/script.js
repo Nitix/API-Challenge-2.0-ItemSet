@@ -71,7 +71,9 @@ $(document).ready(function () {
         var search = $(this).val().toLowerCase();
         var items = $('.item-search', '#itemlist');
         items.each(function(){
-            if($.inArray(search, $(this).data('tags').toLowerCase().split(';')) == -1 && $(this).find('.popover-title').html().toLowerCase().indexOf(search) == -1){
+            if($.inArray(search, $(this).data('tags').toLowerCase().split(';')) == -1 &&
+                $.inArray(search, $(this).data('colloq').toLowerCase().split(';')) == -1 &&
+                $(this).find('.popover-title').html().toLowerCase().indexOf(search) == -1){
                 $(this).hide();
                 hide.push(this);
             }

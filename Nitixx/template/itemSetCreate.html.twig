@@ -129,7 +129,8 @@
     <div class="col-md-4" id="itemlist">
         {% for item in items %}
             <div id="item-{{ item.get('id') }}" class="item-search" data-id="{{ item.get('id') }}"
-                 data-tags="{% if item.get('tags') is not empty %}{{ item.get("tags")|join(';') }}{% endif %}">
+                 data-tags="{% if item.get('tags') is not empty %}{{ item.get("tags")|join(';') }}{% endif %}"
+                 data-colloq="{% if item.get('colloq') is not empty %}{{ item.get("colloq")|join(';') }}{% endif %}" >
                 {% include "item.html.twig" %}
             </div>
         {% endfor %}
