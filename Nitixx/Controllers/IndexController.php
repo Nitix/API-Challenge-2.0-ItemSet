@@ -29,28 +29,28 @@ class IndexController extends  Controller
         return true;
     }
 
-    public function index()
+    public function indexAction()
     {
         $twig = $this->twigInit();
         $template = $twig->loadTemplate('home.html.twig');
         echo $template->render([]);
     }
 
-    public function error404()
+    public function error404Action()
     {
         $twig = $this->twigInit();
         $template = $twig->loadTemplate('404.html.twig');
         echo $template->render([]);
     }
 
-    public function databaseDown()
+    public function databaseDownAction()
     {
         $twig = $this->twigInit();
         $template = $twig->loadTemplate('databaseDown.html.twig');
         echo $template->render([]);
     }
 
-    public function riotAPIDown()
+    public function riotAPIDownAction()
     {
         $twig = $this->twigInit();
         $template = $twig->loadTemplate('riotAPIDown.html.twig');

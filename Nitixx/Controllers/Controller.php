@@ -25,6 +25,7 @@ abstract class Controller
             'download' => [ 'id' => 'id'],
             'create' => [],
             'post' => [],
+            'list' => [],
         ],
     ];
 

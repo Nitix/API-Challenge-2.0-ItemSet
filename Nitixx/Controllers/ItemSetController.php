@@ -10,7 +10,7 @@ use Nitixx\Models\Mode;
 
 class ItemSetController extends Controller
 {
-    private static $actions = ['index', 'upload', 'view', 'download', 'create', 'post'];
+    private static $actions = ['index', 'upload', 'view', 'list', 'download', 'create', 'post'];
 
     /**
      * @inheritDoc
@@ -28,7 +28,7 @@ class ItemSetController extends Controller
         return true;
     }
 
-    function index()
+    function indexAction()
     {
         $twig = $this->twigInit();
 
@@ -40,7 +40,7 @@ class ItemSetController extends Controller
      * Verify the item set uploaded and create an item set with our Models
      * This help to add security as all data will be filtered
      */
-    public function upload()
+    public function uploadAction()
     {
         $twig = $this->twigInit();
         if (isset($_FILES['itemset'])) {
@@ -77,7 +77,7 @@ class ItemSetController extends Controller
      * Render an item set stored in the database
      * @args id ID of the itemSet
      */
-    public function view($args = [])
+    public function viewAction($args = [])
     {
         $twig = $this->twigInit();
         if(!empty($args)) {
@@ -94,7 +94,12 @@ class ItemSetController extends Controller
         }
     }
 
-    public function download($args = [])
+    public function listAction($args)
+    {
+
+    }
+
+    public function downloadAction($args = [])
     {
 
         if(!empty($args)) {
@@ -115,7 +120,7 @@ class ItemSetController extends Controller
         }
     }
 
-    public function create($args = [])
+    public function createAction($args = [])
     {
         $twig = $this->twigInit();
         $api = ApiManager::getAPI();
@@ -128,7 +133,7 @@ class ItemSetController extends Controller
             'type' => new ItemSetType(), 'mode' => new Mode(), 'map' => new Map(), 'summonerSpell' => $api->staticData()->getSummonerSpells('all'), 'champions' => $champions ]);
     }
 
-    public function post($args = []){
+    public function postAction($args = []){
         $poster = new ItemSetPoster();
         $poster->parse();
         $itemSet = $poster->getItemSet();

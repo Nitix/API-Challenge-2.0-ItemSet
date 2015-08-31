@@ -58,6 +58,7 @@ class Dispatcher
                 if ($instance instanceof Controller) {  //Controller must extends Controller
                     if ($action != null && !empty($action)) { //Check if action exist
                         if ($instance->hasAction($action)) {
+                            $action = $action . 'Action';
                             if ($instance->hasRightAccess($action)) {
                                 $instance->$action($args);
                             } else {
