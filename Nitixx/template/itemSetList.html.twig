@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Welcome{% endblock %}
+{% block content %}
+    <h2>List of Item Sets </h2>
+    <table class="table table-striped .table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Map</th>
+                <th>Mode</th>
+                <th>Champion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for itemSet in list %}
+            <tr>
+                <td><a href="{{ url('itemset', 'view', { id : itemSet.id }) }}">{{ itemSet.title }}</a></td>
+                <td>{{ static_method('Nitixx\\Models\\Map','getFullName', [ itemSet.map ]) }}</td>
+                <td>{{ static_method('Nitixx\\Models\\Mode','getFullName', [ itemSet.mode ]) }}</td>
+                <td>{{ itemSet.champion.get('name') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+

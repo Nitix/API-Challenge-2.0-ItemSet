@@ -149,7 +149,7 @@
                     <label for="champion" class="col-sm-2 control-label">Champion</label>
                     <div class="col-sm-10">
                         <select class="form-control" id="champion" name="champion">
-                            <option value="-1">All</option>
+                            <option value="0">All</option>
                             {% for champion in champions %}
                                 <option value="{{ champion.get('id') }}">{{ champion.get('name') }}</option>
                             {% endfor %}
@@ -212,7 +212,7 @@
                 <div class="panel-body sortable-block" id="sortable-block-0">
                 </div>
                 <div class="panel-body">
-                    <span>Drop items <i class="fa fa-arrow-up"></i> too add them to the block, subsequent same items will grouped when posted. </span>
+                    <span>Drag and drop items <i class="fa fa-arrow-up"></i> too add them to the block, subsequent same items will be grouped when posted. </span>
                     <br>
                     <button type="button" class="btn btn-default collapser collapsed" data-toggle="collapse" data-target="#panel-footer-0" aria-expanded="false" aria-controls="panel-footer-0">Options</button>
                 </div>

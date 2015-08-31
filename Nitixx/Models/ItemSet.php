@@ -2,6 +2,8 @@
 
 
 namespace Nitixx\Models;
+use LeagueWrap\Dto\StaticData\Champion;
+use Nitixx\Controllers\ApiManager;
 use Nitixx\Controllers\DatabaseManager;
 
 /**
@@ -60,7 +62,7 @@ class ItemSet implements DBObjectInterface
     /**
      * @var Block[] List of blocks of the item set
      */
-    private $blocks = [];
+    private $blocks;
 
     /**
      * @var string Comment of the itemset
@@ -68,7 +70,7 @@ class ItemSet implements DBObjectInterface
     private $comment = "";
 
     /**
-     * @var int Champion ID
+     * @var Champion
      */
     private $champion = 0;
 
@@ -201,7 +203,7 @@ class ItemSet implements DBObjectInterface
     }
 
     /**
-     * @return int
+     * @return Champion
      */
     public function getChampion()
     {
@@ -209,9 +211,9 @@ class ItemSet implements DBObjectInterface
     }
 
     /**
-     * @param int $champion
+     * @param Champion $champion
      */
-    public function setChampion($champion)
+    public function setChampion(Champion $champion)
     {
         $this->champion = $champion;
     }
@@ -221,6 +223,13 @@ class ItemSet implements DBObjectInterface
      */
     public function getBlocks()
     {
+        if($this->blocks == null){
+            if($this->id != null){
+                $this->setBlocks(Block::findAllByItemSet($this));
+            }else{
+                $this->blocks = [];
+            }
+        }
         return $this->blocks;
     }
 
@@ -238,6 +247,13 @@ class ItemSet implements DBObjectInterface
      */
     public function addBlock(Block $block)
     {
+        if($this->blocks == null){
+            if($this->id != null){
+                $this->setBlocks(Block::findAllByItemSet($this));
+            }else{
+                $this->blocks = [];
+            }
+        }
         $this->blocks[] = $block;
     }
 
@@ -247,6 +263,13 @@ class ItemSet implements DBObjectInterface
      */
     public function removeBlock(Block $block)
     {
+        if($this->blocks == null){
+            if($this->id != null){
+                $this->setBlocks(Block::findAllByItemSet($this));
+            }else{
+                $this->blocks = [];
+            }
+        }
         $block->delete();
         $index = array_search($block, $this->blocks);
 
@@ -322,14 +345,15 @@ class ItemSet implements DBObjectInterface
         $map  = $this->map; //PDO will overwrite my datatype if I don't copy them
         $type = $this->type;
         $mode = $this->mode;
-        $stmt->bindParam(':title',    $this->title,          \PDO::PARAM_STR );
+        $champion = $this->champion->get('id');
+        $stmt->bindParam(':title',    $this->title,    \PDO::PARAM_STR );
         $stmt->bindParam(':type',     $type,           \PDO::PARAM_STR );
         $stmt->bindParam(':map',      $map,            \PDO::PARAM_STR );
         $stmt->bindParam(':mode',     $mode,           \PDO::PARAM_STR );
         $stmt->bindParam(':priority', $this->priority, \PDO::PARAM_BOOL );
         $stmt->bindParam(':sortrank', $this->sortrank, \PDO::PARAM_INT );
-        $stmt->bindParam(':comment',  $this->comment,         \PDO::PARAM_STR );
-        $stmt->bindParam(':champion', $this->champion, \PDO::PARAM_INT );
+        $stmt->bindParam(':comment',  $this->comment,  \PDO::PARAM_STR );
+        $stmt->bindParam(':champion', $champion,       \PDO::PARAM_INT );
     }
 
     /**
@@ -345,7 +369,14 @@ class ItemSet implements DBObjectInterface
         }
     }
 
-    public static function findById($id){
+    /**
+     * Give the itemSet by an given id
+     * @param $id ID of the item set
+     *
+     * @return ItemSet|null
+     */
+    public static function findById($id)
+    {
         $pdo = DatabaseManager::getConnection();
         $stmt = $pdo->prepare("SELECT * FROM itemset WHERE id = :id");
         $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
@@ -354,16 +385,46 @@ class ItemSet implements DBObjectInterface
         if($data == false)
             return null;
         $itemSet = new ItemSet();
-        $itemSet->setId($data['id']);
-        $itemSet->setTitle($data['title']);
-        $itemSet->setType(ItemSetType::getItemSetType($data['type']));
-        $itemSet->setMap(Map::getMap($data['map']));
-        $itemSet->setMode(Mode::getMode($data['mode']));
-        $itemSet->setPriority(new \SplBool($data['priority'] == 1 ? true : false));
-        $itemSet->setSortrank(new \SplInt((int)$data['sortrank']));
-        $itemSet->setComment($data['comment']);
-        $itemSet->setChampion($data['champion']);
-        $itemSet->setBlocks(Block::findAllByItemSet($itemSet));
+        $itemSet->parseArray($data);
         return $itemSet;
+    }
+
+    /**
+     * Give the list of item set
+     * @return ItemSet[] list of ItemSet
+     */
+    public static function findAll()
+    {
+        $array = [];
+        $pdo = DatabaseManager::getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM itemset ORDER BY id DESC ");
+        $stmt->execute();
+        while($data = $stmt->fetch()){
+            $itemSet = new ItemSet();
+            $itemSet->parseArray($data);
+            $array[] = $itemSet;
+        }
+        return $array;
+    }
+
+    /**
+     * Parse the array to add data to the current ItemSet
+     * This is used to parse data from database
+     * @param array $data
+     */
+    private function parseArray(array $data)
+    {
+        $this->setId($data['id']);
+        $this->setTitle($data['title']);
+        $this->setType(ItemSetType::getItemSetType($data['type']));
+        $this->setMap(Map::getMap($data['map']));
+        $this->setMode(Mode::getMode($data['mode']));
+        $this->setPriority(new \SplBool($data['priority'] == 1 ? true : false));
+        $this->setSortrank(new \SplInt((int)$data['sortrank']));
+        $this->setComment($data['comment']);
+        if($data['champion'] != 0) {
+            $this->setChampion(ApiManager::getAPI()->staticData()->getChampion($data['champion'], 'all'));
+        }
+        //No blocks as they are loading when needed
     }
 }

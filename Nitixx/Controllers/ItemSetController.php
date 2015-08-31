@@ -94,9 +94,12 @@ class ItemSetController extends Controller
         }
     }
 
-    public function listAction($args)
+    public function listAction($args = [])
     {
-
+        $twig = $this->twigInit();
+        $list = ItemSet::findAll();
+        $template = $twig->loadTemplate('itemSetList.html.twig');
+        echo $template->render(['list' => $list]);
     }
 
     public function downloadAction($args = [])
@@ -128,7 +131,7 @@ class ItemSetController extends Controller
         $items->sortByGoldAndName();
         $champions = $api->staticData()->getChampions();
         $champions->sortByName();
-        $template = $twig->loadTemplate('itemSet-create.html.twig');
+        $template = $twig->loadTemplate('itemSetCreate.html.twig');
         echo $template->render(['items' => $items, 'version' => $api->staticData()->version()[0],
             'type' => new ItemSetType(), 'mode' => new Mode(), 'map' => new Map(), 'summonerSpell' => $api->staticData()->getSummonerSpells('all'), 'champions' => $champions ]);
     }

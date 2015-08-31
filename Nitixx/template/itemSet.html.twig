@@ -66,21 +66,23 @@
 
     <label>Global</label> : <code>League of Legends\Config\Global\Recommended\</code> <br>
 
-    <label for="chamionkey">Or for this champion</label>
+    <label for="championkey">Or for this champion</label>
+    {% set key = '{championKey}' %}
+
     <select class="form-control" id="championkey" style="display: inline-block; width:20%;">
         <option value="{championKey}"></option>
-        {% if itemSet.champion == 0 %}
+        {% if itemSet.champion is null %}
             {% for champion in champions %}
                 <option value="{{ champion.get('key') }}">{{ champion.get('name') }}</option>
             {% endfor %}
         {% else %}
-            {% set selected = itemSet.champion %}
+            {% set selected = itemSet.champion.get('id') %}
             {% for champion in champions %}
-                <option value="{{ champion.get('key') }} {% if selected == champion.get('id') %}selected{%  endif %}">{{ champion.get('name') }}</option>
+                <option value="{{ champion.get('key') }}" {% if selected == champion.get('id') %}{% set key = champion.get('key') %}selected{%  endif %}>{{ champion.get('name') }}</option>
             {% endfor %}
         {% endif %}
     </select>
-    <code id="text-champion">League of Legends\Config\Champions\{championKey}\Recommended\</code>
+    <code id="text-champion">League of Legends\Config\Champions\{{ key }}\Recommended\</code>
     <br>
     <br>
     <a href="{{ url('itemset', 'download', {id:itemSet.id}) }}"><button class="btn btn-default">Download as JSON</button></a>

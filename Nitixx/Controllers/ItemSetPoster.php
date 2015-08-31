@@ -8,6 +8,7 @@
 
 namespace Nitixx\Controllers;
 
+use LeagueWrap\Dto\StaticData\ChampionList;
 use LeagueWrap\Dto\StaticData\ItemList;
 use LeagueWrap\Dto\StaticData\SummonerSpellList;
 use Nitixx\Models\Block;
@@ -40,6 +41,11 @@ class ItemSetPoster
     private $itemList;
 
     /**
+     * @var ChampionList
+     */
+    private $champions;
+
+    /**
      * @param ItemSet|null $itemSet Prepare the parser to use a specified ItemSet
      */
     public function __construct(ItemSet $itemSet = null)
@@ -48,6 +54,8 @@ class ItemSetPoster
         $this->summonerSpellList = $api->staticData()->getSummonerSpells('all');
         $this->itemList = $api->staticData()->getItems('all');
         $this->itemSet = ($itemSet == null ? new ItemSet() : $itemSet);
+        $this->champions = $api->staticData()->getChampions('all');
+
     }
 
     /**
@@ -63,7 +71,9 @@ class ItemSetPoster
 
         //Type
         if(isset($_POST['champion'])) {
-            $this->itemSet->setChampion(@(int)$_POST['champion']);
+            $champion = $this->summonerSpellList->getSpell($_POST['champion']);
+            if($champion != null)
+                $this->itemSet->setChampion($champion);
         }
 
         //Type
